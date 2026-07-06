@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RageBlast — one message, one reply, gone</title>
+<meta name="description" content="Send one anonymous message. Get one anonymous reply. The thread closes forever.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="atmosphere" aria-hidden="true"></div>
+
+<main class="stage">
+
+  <header class="masthead">
+    <p class="eyebrow">anonymous &middot; one shot &middot; then gone</p>
+    <h1>RAGE<span class="blast">BLAST</span></h1>
+    <p class="tagline">Say the thing. A stranger reads it once and answers once. Then the line goes dead.</p>
+  </header>
+
+  <nav class="railtrack" aria-label="Exchange progress">
+    <ol id="rail">
+      <li class="rail-step is-active" data-step="vent"><span class="dot"></span>Vent</li>
+      <li class="rail-step" data-step="match"><span class="dot"></span>Match</li>
+      <li class="rail-step" data-step="reply"><span class="dot"></span>Reply</li>
+      <li class="rail-step" data-step="rate"><span class="dot"></span>Rate</li>
+      <li class="rail-step" data-step="closed"><span class="dot"></span>Closed</li>
+    </ol>
+  </nav>
+
+  <section class="console" aria-live="polite">
+
+    <!-- VENT -->
+    <div class="panel" id="panel-vent">
+      <label class="panel-label" for="msg">what's the charge?</label>
+      <textarea id="msg" maxlength="600" placeholder="Type exactly what's burning right now. No names, no filter." aria-describedby="charcount heatlabel"></textarea>
+
+      <div class="gauge-row">
+        <div class="gauge-track" role="img" aria-label="Message heat signature">
+          <div class="gauge-fill" id="gaugeFill"></div>
+        </div>
+        <span class="gauge-label" id="heatlabel">HEAT 0°</span>
+      </div>
+
+      <div class="console-foot">
+        <span id="charcount" class="charcount">0 / 600</span>
+        <button id="blastBtn" class="btn-blast" type="button">
+          <span class="btn-label">Blast it</span>
+          <span class="btn-spark" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- MATCH -->
+    <div class="panel is-hidden" id="panel-match">
+      <p class="matching-line" id="matchingLine">scanning the anonymous pool&hellip;</p>
+      <div class="pulsebar" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+
+      <div class="readout" id="readout" hidden>
+        <p class="readout-title">incoming signal</p>
+        <div class="trait-grid" id="traitGrid"></div>
+      </div>
+    </div>
+
+    <!-- REPLY -->
+    <div class="panel is-hidden" id="panel-reply">
+      <p class="reply-tag" id="replyArchetype">THE ROASTER</p>
+      <p class="reply-text" id="replyText"></p>
+      <div class="reply-rule"></div>
+      <p class="reply-meta">no name &middot; no history &middot; can't be found again</p>
+    </div>
+
+    <!-- RATE -->
+    <div class="panel is-hidden" id="panel-rate">
+      <p class="panel-label">before it's gone — what landed?</p>
+      <div class="rate-grid" id="rateGrid">
+        <button class="rate-chip" data-rate="calmer">calmer</button>
+        <button class="rate-chip" data-rate="funny">funny</button>
+        <button class="rate-chip" data-rate="savage">savage</button>
+        <button class="rate-chip" data-rate="wise">wise</button>
+        <button class="rate-chip" data-rate="unexpected">unexpected</button>
+        <button class="rate-chip" data-rate="brutal">brutal</button>
+      </div>
+      <button class="btn-skip" id="skipRate" type="button">skip rating</button>
+    </div>
+
+    <!-- CLOSED -->
+    <div class="panel is-hidden" id="panel-closed">
+      <div class="cooldown-ring" aria-hidden="true"><div class="cooldown-fill" id="cooldownFill"></div></div>
+      <p class="closed-title">thread closed</p>
+      <p class="closed-sub">cooled to 0°. nothing here leads back to anyone.</p>
+      <button class="btn-again" id="ventAgain" type="button">start a new one-shot</button>
+    </div>
+
+    <!-- SAFETY -->
+    <div class="panel is-hidden" id="panel-safety">
+      <p class="safety-title">hold on a second.</p>
+      <p class="safety-text">That sounds like more than a rage-vent — like it might really hurt right now. This platform isn't built to carry that alone, and a random stranger's one reply isn't real support.</p>
+      <p class="safety-text">If you're in danger or thinking about ending your life, please talk to someone now: in the US, call or text <strong>988</strong>. Outside the US, <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a> lists local, free crisis lines.</p>
+      <button class="btn-again" id="safetyBack" type="button">okay, go back</button>
+    </div>
+
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
