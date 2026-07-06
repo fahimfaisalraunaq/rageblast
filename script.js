@@ -9,7 +9,6 @@
   "use strict";
 
   /* ---------------- archetypes ---------------- */
-  // trait order: humor, savage, empathy, chaos, logic, unexpected
   const ARCHETYPES = {
     "The Chaos Goblin": {
       traits: [8, 9, 3, 10, 3, 9],
@@ -103,11 +102,7 @@
 
   const TRAIT_LABELS = ["Humor", "Savage", "Empathy", "Chaos", "Logic", "Unexpected"];
 
-  /* ---------------- crisis safety net ----------------
-     Minimal, non-exhaustive keyword check. This is a client-side
-     placeholder for the real moderation layer described in the
-     product brief — swap for a proper backend classifier before
-     any real launch. */
+  /* ---------------- crisis safety net ---------------- */
   const CRISIS_PATTERNS = [
     /kill myself/i, /killing myself/i, /suicid/i, /want(ed)? to die/i,
     /end(ing)? my life/i, /end it all/i, /don'?t want to (be alive|live)/i,
@@ -125,13 +120,6 @@
     const bangs = (text.match(/!/g) || []).length * 5;
     const qs = (text.match(/\?{2,}/g) || []).length * 4;
     return Math.max(4, Math.min(100, Math.round(len + caps + bangs + qs)));
-  }
-
-  function heatColor(heat) {
-    if (heat < 25) return "cool";
-    if (heat < 55) return "warm";
-    if (heat < 80) return "hot";
-    return "scorching";
   }
 
   /* ---------------- weighted archetype pick ---------------- */
@@ -177,11 +165,13 @@
 
   const replyArchetype = document.getElementById("replyArchetype");
   const replyText = document.getElementById("replyText");
+  const replyNext = document.getElementById("replyNext");
 
   const rateGrid = document.getElementById("rateGrid");
   const skipRate = document.getElementById("skipRate");
+  const finishBtn = document.getElementById("finishBtn");
 
-  const cooldownFill = document.getElementById("cooldownFill");
+  const cooldownRing = document.getElementById("cooldownRing");
   const ventAgain = document.getElementById("ventAgain");
   const safetyBack = document.getElementById("safetyBack");
 
@@ -279,12 +269,13 @@
     replyText.textContent = line;
     showPanel("reply");
     setRail("reply");
-
-    after(2600, () => {
-      showPanel("rate");
-      setRail("rate");
-    });
   }
+
+  /* ---------------- manual reply progression ---------------- */
+  replyNext.addEventListener("click", () => {
+    showPanel("rate");
+    setRail("rate");
+  });
 
   /* ---------------- rating ---------------- */
   rateGrid.addEventListener("click", (e) => {
@@ -292,9 +283,10 @@
     if (!btn) return;
     Array.from(rateGrid.children).forEach((c) => c.classList.remove("is-picked"));
     btn.classList.add("is-picked");
-    after(500, goToClosed);
+    // Removed auto-advance here so users have control.
   });
 
+  finishBtn.addEventListener("click", goToClosed);
   skipRate.addEventListener("click", goToClosed);
 
   /* ---------------- closed / cooldown ---------------- */
@@ -302,16 +294,18 @@
     showPanel("closed");
     setRail("closed");
     animateCooldown();
+    // Safely re-enable blastBtn now that the thread is permanently closed
+    blastBtn.disabled = false;
   }
 
   function animateCooldown() {
     let deg = 360;
-    cooldownFill.parentElement.style.background =
+    cooldownRing.style.background =
       `conic-gradient(var(--heat-4) ${deg}deg, var(--surface-2) ${deg}deg)`;
     const step = () => {
       deg -= 40;
       const color = deg > 180 ? "var(--heat-3)" : "var(--heat-1)";
-      cooldownFill.parentElement.style.background =
+      cooldownRing.style.background =
         `conic-gradient(${color} ${Math.max(deg, 0)}deg, var(--surface-2) ${Math.max(deg, 0)}deg)`;
       if (deg > 0) after(140, step);
     };
