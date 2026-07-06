@@ -72,6 +72,9 @@
       <p class="reply-text" id="replyText"></p>
       <div class="reply-rule"></div>
       <p class="reply-meta">no name &middot; no history &middot; can't be found again</p>
+      <div class="console-foot">
+         <button id="replyNext" class="btn-blast" type="button">I read it</button>
+      </div>
     </div>
 
     <!-- RATE -->
@@ -85,12 +88,15 @@
         <button class="rate-chip" data-rate="unexpected">unexpected</button>
         <button class="rate-chip" data-rate="brutal">brutal</button>
       </div>
-      <button class="btn-skip" id="skipRate" type="button">skip rating</button>
+      <div class="console-foot" style="justify-content: space-between;">
+        <button class="btn-skip" id="skipRate" type="button">skip rating</button>
+        <button id="finishBtn" class="btn-blast" type="button">Finish</button>
+      </div>
     </div>
 
     <!-- CLOSED -->
     <div class="panel is-hidden" id="panel-closed">
-      <div class="cooldown-ring" aria-hidden="true"><div class="cooldown-fill" id="cooldownFill"></div></div>
+      <div class="cooldown-ring" id="cooldownRing" aria-hidden="true"></div>
       <p class="closed-title">thread closed</p>
       <p class="closed-sub">cooled to 0°. nothing here leads back to anyone.</p>
       <button class="btn-again" id="ventAgain" type="button">start a new one-shot</button>
